@@ -12,33 +12,23 @@ vx = data[:, 3]
 vy = data[:, 4]
 
 fig, ax = plt.subplots()
-scatters = [ax.plot([], [], 'o')[0] for _ in range(len(x))]
-ax.set_xlim(-2, 2)
-ax.set_ylim(-2, 2)
+points = [ax.plot([], [], 'o', markersize=5)[0] for _ in range(len(x))]
+ax.set_xlim(-900e9, 900e9)
+ax.set_ylim(-900e9, 900e9)
 ax.set_aspect('equal')
 
 def init():
-    for scatter in scatters:
-        scatter.set_data([], [])
-    return scatters
+    for point in points:
+        point.set_data([], [])
+    return points
 
 def update(frame):
     global x, y, vx, vy, masses
-    axes_acc = []
-    for i in range(len(x)):
-        total_ax = 0
-        total_ay = 0
-        for j in range(len(x)):
-            if i != j:
-                ax, ay = count_boost(x[i], y[i], x[j], y[j], masses[j])
-                total_ax += ax
-                total_ay += ay
-        axes_acc.append([total_ax, total_ay])
-    for i in range(len(x)):
-        a = axes_acc[i]
-        x[i], y[i], vx[i], vy[i] = count_coords(x[i], y[i], vx[i], vy[i], ax, ay)
-    for i, scatter in enumerate(scatters):
-        scatter.set_data(x[i], y[i])
-    return scatters
-anim = FuncAnimation(fig, update, init_func=init, frames=1000, interval=20, blit=True)
+    x, y, vx, vy = count_coords(x, y, vx, vy, masses)
+    for i, point in enumerate(points):
+        point.set_xdata([x[i]])
+        point.set_ydata([y[i]])
+    return points
+anim = FuncAnimation(fig, update, init_func=init, frames=10000, interval=5, blit=True)
+plt.tight_layout()
 plt.show()

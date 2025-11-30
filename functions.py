@@ -8,7 +8,7 @@ def read_file(filename):
             for line in f:
                 if line.strip():
                     parts = line.split()
-                    if len(parts) >= 4:
+                    if len(parts) == 5:
                         m = float(parts[0])
                         x0 = float(parts[1])
                         y0 = float(parts[2])
@@ -20,25 +20,40 @@ def read_file(filename):
         data = [[1.989e30, 0, 0, 0, 0], [5.972e24, 152e9, 0, 0, 29290]]
     return np.array(data)
 
-
-def count_coords(x, y, vx, vy, ax, ay):
-    dt = 3600 * 24
-    vx_next = vx + ax * dt
-    vy_next = vy + ay * dt
-    x_next = x + vx * dt
-    y_next = y + vy * dt
-    return x_next, y_next, vx_next, vy_next
-
-
 def count_boost(x1, y1, x2, y2, M):
     G = 6.67e-11
     dx = x2 - x1
     dy = y2 - y1
-    r = np.arctan2(dy, dx)
+    alfa = np.arctan2(dy, dx)
     dist = np.linalg.norm([dx, dy])
     a_magnitude = G * M / (dist ** 2)
-    ax = a_magnitude * np.cos(r)
-    ay = a_magnitude * np.sin(r)
+    ax = a_magnitude * np.cos(alfa)
+    ay = a_magnitude * np.sin(alfa)
     return ax, ay
+
+def count_coords(x, y, vx, vy, masses):
+    dt = 3600 * 24
+    n = len(x)
+    ax = np.zeros(n)
+    ay = np.zeros(n)
+
+    for i in range(n):
+        total_ax, total_ay = 0, 0
+        for j in range(n):
+            if i != j:
+                ax_ij, ay_ij = count_boost(x[i], y[i], x[j], y[j], masses[j])
+                total_ax += ax_ij
+                total_ay += ay_ij
+        ax[i], ay[i] = total_ax, total_ay
+
+    for i in range(n):
+        vx[i] += ax[i] * dt
+        vy[i] += ay[i] * dt
+
+    for i in range(n):
+        x[i] += vx[i] * dt
+        y[i] += vy[i] * dt
+    
+    return x, y, vx, vy
 
 
