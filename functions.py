@@ -1,8 +1,7 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def read_file():
-    filename = "parameters.txt"
+
+def read_file(filename):
     data = []
     try:
        with open(filename, 'r', encoding='utf-8') as f:
@@ -18,7 +17,7 @@ def read_file():
                         data.append((m, x0, y0, vx, vy))
     except FileNotFoundError:
         print(f"Файл {filename} не найден, используются тестовые значения")
-        data = [[1.989e30 0 0 0 0], [5.972e24 152e9 0 0 29290]]
+        data = [[1.989e30, 0, 0, 0, 0], [5.972e24, 152e9, 0, 0, 29290]]
     return data
 
 
@@ -33,6 +32,15 @@ def count_coords(x, y, vx, vy, a, r):
     return x_next, y_next, vx_next, vy_next
 
 
-def count_boost(x1, y1, x2, y2 M, m):
+def count_boost(x1, y1, x2, y2, M):
+    G = 6.67e-11
+    dx = x2 - x1
+    dy = y2 - y1
+    r = np.arctan2(dy, dx)
+    dist = np.linalg.norm(dx, dy)
+    a_magnitude = G * M / (dist ** 2)
+    ax = a_magnitude * np.cos(r)
+    ay = a_magnitude * np.sin(r)
+    return np.array([ax, ay])
 
-    return
+
