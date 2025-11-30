@@ -21,10 +21,8 @@ def read_file(filename):
     return np.array(data)
 
 
-def count_coords(x, y, vx, vy, a, r):
+def count_coords(x, y, vx, vy, ax, ay):
     dt = 3600 * 24
-    ax = a * r[0]
-    ay = a * r[1]
     vx_next = vx + ax * dt
     vy_next = vy + ay * dt
     x_next = x + vx * dt
@@ -41,6 +39,6 @@ def count_boost(x1, y1, x2, y2, M):
     a_magnitude = G * M / (dist ** 2)
     ax = a_magnitude * np.cos(r)
     ay = a_magnitude * np.sin(r)
-    return np.array([ax, ay])
+    return ax, ay
 
 

@@ -24,20 +24,19 @@ def init():
 
 def update(frame):
     global x, y, vx, vy, masses
-    dt = 3600 * 24
     axes_acc = []
     for i in range(len(x)):
         total_ax = 0
         total_ay = 0
         for j in range(len(x)):
             if i != j:
-                a_ = count_boost(x[i], y[i], x[j], y[j], masses[j])
-                total_ax += a_[0]
-                total_ay += a_[1]
+                ax, ay = count_boost(x[i], y[i], x[j], y[j], masses[j])
+                total_ax += ax
+                total_ay += ay
         axes_acc.append([total_ax, total_ay])
     for i in range(len(x)):
         a = axes_acc[i]
-        x[i], y[i], vx[i], vy[i] = count_coords(x[i], y[i], vx[i], vy[i], a, np.arctan2(a[1], a[0]), dt)
+        x[i], y[i], vx[i], vy[i] = count_coords(x[i], y[i], vx[i], vy[i], ax, ay)
     for i, scatter in enumerate(scatters):
         scatter.set_data(x[i], y[i])
     return scatters
