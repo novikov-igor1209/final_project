@@ -33,7 +33,7 @@ def count_boost(x1, y1, x2, y2, M):
 
 
 def count_coords(x, y, vx, vy, masses, axprev, ayprev):
-    dt = 3600 * 12
+    dt = 3600 * 24
     n = len(x)
     ax = np.zeros(n)
     ay = np.zeros(n)
