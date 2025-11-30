@@ -14,8 +14,8 @@ axprev = np.zeros_like(x)
 ayprev = np.zeros_like(x)
 fig, ax = plt.subplots(figsize=(15, 15))
 points = [ax.plot([], [], 'o', markersize=5)[0] for _ in range(len(x))]
-ax.set_xlim(-900e10, 900e10)
-ax.set_ylim(-900e10, 900e10)
+ax.set_xlim(-900e9, 900e9)
+ax.set_ylim(-900e9, 900e9)
 ax.set_aspect('equal')
 
 def init():

@@ -13,7 +13,7 @@ def read_file(filename):
                         x0 = float(parts[1])
                         y0 = float(parts[2])
                         vx = float(parts[3])
-                        vy = float(parts[3])
+                        vy = float(parts[4])
                         data.append((m, x0, y0, vx, vy))
     except FileNotFoundError:
         print(f"Файл {filename} не найден, используются тестовые значения")
@@ -32,7 +32,6 @@ def count_boost(x1, y1, x2, y2, M):
     return ax, ay
 
 
-
 def count_coords(x, y, vx, vy, masses, axprev, ayprev):
     dt = 3600 * 12
     n = len(x)
@@ -48,8 +47,8 @@ def count_coords(x, y, vx, vy, masses, axprev, ayprev):
         ax[i], ay[i] = total_ax, total_ay
 
     for i in range(n):
-        vx[i] += 0.5*(ax[i] +axprev[i])* dt
-        vy[i] += 0.5*(ay[i] +ayprev[i]) * dt
+        vx[i] += 0.5*(ax[i] + axprev[i])* dt
+        vy[i] += 0.5*(ay[i] + ayprev[i]) * dt
 
     for i in range(n):
         x[i] += vx[i] * dt + 0.5 * axprev[i] * dt**2
