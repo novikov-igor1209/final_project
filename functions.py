@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def read_file(filename):
     data = []
     try:
@@ -53,5 +52,3 @@ def count_coords(x, y, vx, vy, masses, axprev, ayprev):
         y[i] += vy[i] * dt + 0.5 * ayprev[i] * dt ** 2
     
     return x, y, vx, vy, ax, ay
-
-
