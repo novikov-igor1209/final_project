@@ -24,19 +24,20 @@ def count_boost(x1, y1, x2, y2, M):
     G = 6.67e-11
     dx = x2 - x1
     dy = y2 - y1
-    alfa = np.arctan2(dy, dx)
-    dist = np.linalg.norm([dx, dy])
-    a_magnitude = G * M / (dist ** 2)
+    alfa = np.arctan(dy/dx)
+    dist = np.sqrt(dx**2 + dy**2)
+    a_magnitude = -G * M / (dist ** 2)
     ax = a_magnitude * np.cos(alfa)
     ay = a_magnitude * np.sin(alfa)
     return ax, ay
 
-def count_coords(x, y, vx, vy, masses):
-    dt = 3600 * 24
+
+
+def count_coords(x, y, vx, vy, masses, axprev, ayprev):
+    dt = 3600 * 12
     n = len(x)
     ax = np.zeros(n)
     ay = np.zeros(n)
-
     for i in range(n):
         total_ax, total_ay = 0, 0
         for j in range(n):
@@ -47,13 +48,13 @@ def count_coords(x, y, vx, vy, masses):
         ax[i], ay[i] = total_ax, total_ay
 
     for i in range(n):
-        vx[i] += ax[i] * dt
-        vy[i] += ay[i] * dt
+        vx[i] += 0.5*(ax[i] +axprev[i])* dt
+        vy[i] += 0.5*(ay[i] +ayprev[i]) * dt
 
     for i in range(n):
-        x[i] += vx[i] * dt
-        y[i] += vy[i] * dt
+        x[i] += vx[i] * dt + 0.5 * axprev[i] * dt**2
+        y[i] += vy[i] * dt + 0.5 * ayprev[i] * dt**2
     
-    return x, y, vx, vy
+    return x, y, vx, vy, ax, ay
 
 
