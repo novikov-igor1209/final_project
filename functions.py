@@ -1,4 +1,5 @@
 import numpy as np
+from numba import njit
 
 def read_file(filename):
     data = []
@@ -19,23 +20,29 @@ def read_file(filename):
         data = [[1.989e30, 0, 0, 0, 0], [5.972e24, 152e9, 0, 0, 29290]]
     return np.array(data)
 
-def count_boost(x1, y1, x2, y2, M):
-    G = 6.67e-11
+
+
+@njit
+def count_boost(x1, y1, x2, y2, mass2):
+    # пример реализации, замените реальной логикой
+    G = 6.67430e-11
     dx = x2 - x1
     dy = y2 - y1
-    dist = np.sqrt(dx ** 2 + dy ** 2)
-    ax = G * M * dx / (dist ** 3)
-    ay = G * M * dy / (dist ** 3)
+    r_squared = dx*dx + dy*dy + 1e-10
+    force = G * mass2 / r_squared
+    dist = np.sqrt(r_squared)
+    ax = force * dx / dist
+    ay = force * dy / dist
     return ax, ay
 
-
+@njit
 def count_coords(x, y, vx, vy, masses, axprev, ayprev):
     dt = 3600 * 24
     n = len(x)
-    ax = np.zeros(n)
-    ay = np.zeros(n)
+    ax = np.empty(n)
+    ay = np.empty(n)
     for i in range(n):
-        total_ax, total_ay = 0, 0
+        total_ax, total_ay = 0.0, 0.0
         for j in range(n):
             if i != j:
                 ax_ij, ay_ij = count_boost(x[i], y[i], x[j], y[j], masses[j])

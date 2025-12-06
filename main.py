@@ -3,9 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-
 if __name__=='main':
-    data = read_file("parameters2.txt")
+    data = read_file("data.txt")
     masses = data[:, 0]
     x = data[:, 1]
     y = data[:, 2]
@@ -19,7 +18,7 @@ if __name__=='main':
     points.append(ax.plot([], [], 'o', markersize=6)[0])
     for _ in range(1, n):
         points.append(ax.plot([], [], 'o', markersize=4)[0])
-    lim = max(x) + 100e9
+    lim = 1.1*max(x)
     ax.set_xlim(-lim, lim)
     ax.set_ylim(-lim, lim)
     ax.set_aspect('equal')
@@ -36,6 +35,6 @@ if __name__=='main':
             point.set_xdata([x[i]])
             point.set_ydata([y[i]])
         return points
-    anim = FuncAnimation(fig, update, init_func=init, frames=30, interval=50, blit=True)
+    anim = FuncAnimation(fig, update, init_func=init, frames=30, interval=100, blit=True)
     plt.tight_layout()
     plt.show()
