@@ -1,5 +1,6 @@
 import numpy as np
 from numba import njit
+from scipy.constants import G
 
 def read_file(filename):
     data = []
@@ -16,8 +17,7 @@ def read_file(filename):
                         vy = float(parts[4])
                         data.append((m, x0, y0, vx, vy))
     except FileNotFoundError:
-        print(f"Файл {filename} не найден, используются тестовые значения")
-        data = [[1.989e30, 0, 0, 0, 0], [5.972e24, 152e9, 0, 0, 29290]]
+        return 0
     return np.array(data)
 
 
@@ -25,7 +25,6 @@ def read_file(filename):
 @njit
 def count_boost(x1, y1, x2, y2, mass2):
     # пример реализации, замените реальной логикой
-    G = 6.67430e-11
     dx = x2 - x1
     dy = y2 - y1
     r_squared = dx*dx + dy*dy + 1e-10

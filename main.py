@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+
 if __name__=='main':
     data = read_file("data.txt")
     masses = data[:, 0]
