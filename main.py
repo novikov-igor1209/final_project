@@ -18,7 +18,7 @@ points = []
 points.append(ax.plot([], [], 'o', markersize=6)[0])
 for _ in range(1, n):
     points.append(ax.plot([], [], 'o', markersize=4)[0])
-size = 1.2
+size = 1.5
 lim = size * max(x)
 ax.set_xlim(-lim, lim)
 ax.set_ylim(-lim, lim)
@@ -37,6 +37,6 @@ def update(frame):
         point.set_xdata([x[i]])
         point.set_ydata([y[i]])
     return points
-anim = FuncAnimation(fig, update, init_func=init, frames=200, interval=20, blit=True)
+anim = FuncAnimation(fig, update, init_func=init, frames=200, interval=2, blit=True)
 plt.tight_layout()
 plt.show()
