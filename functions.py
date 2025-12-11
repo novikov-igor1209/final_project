@@ -1,5 +1,7 @@
 import numpy as np
 from numba import njit
+from scipy.constants import G
+
 
 def read_file(filename):
     data = []
@@ -24,10 +26,10 @@ def read_file(filename):
 
 @njit
 def count_boost(x1, y1, x2, y2, mass2):
-    G = 6.67430e-11
     dx = x2 - x1
     dy = y2 - y1
-    r_squared = dx*dx + dy*dy + 1e-10
+    dr = 1e-10
+    r_squared = dx*dx + dy*dy + dr
     force = G * mass2 / r_squared
     dist = np.sqrt(r_squared)
     ax = force * dx / dist
@@ -50,11 +52,11 @@ def count_coords(x, y, vx, vy, masses, axprev, ayprev):
         ax[i], ay[i] = total_ax, total_ay
 
     for i in range(n):
-        vx += 0.5 * (ax + axprev) * dt
-        vy += 0.5 * (ay + ayprev) * dt
+        vx[i] += 0.5 * (ax[i] + axprev[i]) * dt
+        vy[i] += 0.5 * (ay[i] + ayprev[i]) * dt
 
     for i in range(n):
-        x += vx * dt + 0.5 * axprev * dt ** 2
-        y += vy * dt + 0.5 * ayprev * dt ** 2
+        x[i] += vx[i] * dt + 0.5 * axprev[i] * dt ** 2
+        y[i] += vy[i] * dt + 0.5 * ayprev[i] * dt ** 2
     
     return x, y, vx, vy, ax, ay

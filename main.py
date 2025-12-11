@@ -18,7 +18,7 @@ points = []
 points.append(ax.plot([], [], 'o', markersize=6)[0])
 for _ in range(1, n):
     points.append(ax.plot([], [], 'o', markersize=4)[0])
-size = 1.5
+size = 1.2
 lim = size * max(x)
 ax.set_xlim(-lim, lim)
 ax.set_ylim(-lim, lim)
